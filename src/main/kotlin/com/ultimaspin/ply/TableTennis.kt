@@ -34,7 +34,7 @@ class Game(val player1: Player,
            private val pointsToWin: Int = DEFAULT_POINTS_TO_WIN) {
 
     init {
-        if (!isPlayer1TheWinner() && !isPlayer2TheWinner()) {
+        if (!(isPlayer1TheWinner() xor isPlayer2TheWinner())) {
             throw IllegalStateException("Invalid game state")
         }
     }
@@ -66,7 +66,13 @@ class Game(val player1: Player,
 
 
     fun getLoser(): Player {
-        TODO()
+        if (isPlayer1TheWinner()) {
+            return player2
+        } else if (isPlayer2TheWinner()) {
+            return player1
+        }
+
+        throw IllegalStateException("Cannot determine lost of this game")
     }
 
     companion object {

@@ -28,6 +28,7 @@ class TableTennisTest {
         )
 
         assertSame(player1, game.getWinner())
+        assertSame(player2, game.getLoser())
 
     }
 
@@ -43,6 +44,7 @@ class TableTennisTest {
         )
 
         assertSame(player1, game.getWinner())
+        assertSame(player2, game.getLoser())
     }
 
     @Test
@@ -57,6 +59,7 @@ class TableTennisTest {
         )
 
         assertSame(player2, game.getWinner())
+        assertSame(player1, game.getLoser())
     }
 
     @Test
@@ -71,6 +74,7 @@ class TableTennisTest {
         )
 
         assertSame(player2, game.getWinner())
+        assertSame(player1, game.getLoser())
     }
 
     // todo consider using assertj to make this test more readable
