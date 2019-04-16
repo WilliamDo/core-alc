@@ -1,14 +1,15 @@
 package com.ultimaspin.ply
 
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalStateException
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 
 class TableTennisTest {
 
-    @Ignore
+    @Disabled("this is an example test")
     @Test
     fun foo() {
         val match = Match(Player("Joe"), Player("Fred"),5)
@@ -78,16 +79,21 @@ class TableTennisTest {
     }
 
     // todo consider using assertj to make this test more readable
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun `invalid game state throws exception`() {
         val player1 = Player("Joe")
         val player2 = Player("Fred")
-        val game = Game(
+
+        val thrown = assertThrows<IllegalStateException> {
+            Game(
                 player1 = player1,
                 player2 = player2,
                 pointsForPlayer1 = 0,
                 pointsForPlayer2 = 0
-        )
+            )
+        }
+
+        assertEquals("Invalid game state", thrown.message)
 
     }
 
