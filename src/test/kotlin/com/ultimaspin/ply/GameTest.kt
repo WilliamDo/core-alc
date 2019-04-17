@@ -7,15 +7,7 @@ import java.lang.IllegalStateException
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 
-class TableTennisTest {
-
-    @Disabled("this is an example test")
-    @Test
-    fun foo() {
-        val match = Match(Player("Joe"), Player("Fred"),5)
-        assertEquals("Joe", match.player1.name)
-        assertEquals("Fred", match.player2.name)
-    }
+class GameTest {
 
     @Test
     fun `player 1 wins with a score of 11`() {
