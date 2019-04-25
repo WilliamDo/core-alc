@@ -1,11 +1,12 @@
 package com.ultimaspin.ply
 
+import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 
-class Game(val player1: Player,
-           val pointsForPlayer1: Int,
-           val player2: Player,
-           val pointsForPlayer2: Int,
+class Game(private val player1: Player,
+           private val pointsForPlayer1: Int,
+           private val player2: Player,
+           private val pointsForPlayer2: Int,
            private val pointsToWin: Int = DEFAULT_POINTS_TO_WIN) {
 
     init {
@@ -25,6 +26,16 @@ class Game(val player1: Player,
 
         throw IllegalStateException("Cannot determine winner of this game")
 
+    }
+
+    fun pointsFor(player: Player): Int {
+        if (player == player1) {
+            return pointsForPlayer1
+        } else if (player == player2) {
+            return pointsForPlayer2
+        }
+
+        throw IllegalArgumentException("Invalid player in this game")
     }
 
     private fun isPlayer1TheWinner(): Boolean {

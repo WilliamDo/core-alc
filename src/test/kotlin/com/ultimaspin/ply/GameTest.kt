@@ -19,6 +19,8 @@ class GameTest {
 
         assertSame(player1, game.getWinner())
         assertSame(player2, game.getLoser())
+        assertEquals(11, game.pointsFor(player1))
+        assertEquals(5, game.pointsFor(player2))
 
     }
 
@@ -35,6 +37,8 @@ class GameTest {
 
         assertSame(player1, game.getWinner())
         assertSame(player2, game.getLoser())
+        assertEquals(14, game.pointsFor(player1))
+        assertEquals(12, game.pointsFor(player2))
     }
 
     @Test
@@ -50,6 +54,8 @@ class GameTest {
 
         assertSame(player2, game.getWinner())
         assertSame(player1, game.getLoser())
+        assertEquals(5, game.pointsFor(player1))
+        assertEquals(11, game.pointsFor(player2))
     }
 
     @Test
@@ -65,6 +71,8 @@ class GameTest {
 
         assertSame(player2, game.getWinner())
         assertSame(player1, game.getLoser())
+        assertEquals(12, game.pointsFor(player1))
+        assertEquals(14, game.pointsFor(player2))
     }
 
     // todo consider using assertj to make this test more readable

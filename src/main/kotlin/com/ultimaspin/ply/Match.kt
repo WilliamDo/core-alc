@@ -23,6 +23,8 @@ class Match(val player1: Player,
         // todo assert that both players are for this match
         // todo check maximum number of games are not exceeded
 
+        // interesting side effect of using player as keys means that it doesn't matter who is player 1 or 2
+
         games.add(Game(
             player1 = pointsOfSomePlayer.first,
             pointsForPlayer1 = pointsOfSomePlayer.second,
