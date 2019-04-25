@@ -2,6 +2,9 @@ package com.ultimaspin.ply
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 
 
 class MatchTest {
@@ -44,6 +47,33 @@ class MatchTest {
         match.addGame(player2 to 11, player1 to 5)
         assertEquals(0, match.countOfGamesFor(player1))
         assertEquals(1, match.countOfGamesFor(player2))
+    }
+
+    @Test
+    fun `unknown player wins a game`() {
+        val player1 = Player("Joe")
+        val player2 = Player("Fred")
+        val match = Match(player1, player2, 5)
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            match.addGame(Player("Ting") to 11, player1 to 5)
+        }
+
+        assertEquals("Some or all of player keys are not involved in this match", thrown.message)
+    }
+
+    @Test
+    fun `max number of games reached`() {
+        val player1 = Player("Joe")
+        val player2 = Player("Fred")
+        val match = Match(player1, player2, 5)
+
+        val thrown = assertThrows<IllegalStateException> {
+            for (i in 0..5)
+            match.addGame(player1 to 11, player2 to 5)
+        }
+
+        assertEquals("Maximum number of games reached", thrown.message)
     }
 
 }

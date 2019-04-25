@@ -1,8 +1,11 @@
 package com.ultimaspin.ply
 
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
+
 class Match(val player1: Player,
             val player2: Player,
-            numberOfGames: Int) {
+            private val numberOfGames: Int) {
 
     private val games = mutableListOf<Game>()
 
@@ -20,8 +23,8 @@ class Match(val player1: Player,
 
     fun addGame(pointsOfSomePlayer: Pair<Player, Int>, pointsOfOtherPlayer: Pair<Player, Int>) {
 
-        // todo assert that both players are for this match
-        // todo check maximum number of games are not exceeded
+        validatePlayers(pointsOfSomePlayer.first, pointsOfOtherPlayer.first)
+        validateMaxNumberOfGames()
 
         // interesting side effect of using player as keys means that it doesn't matter who is player 1 or 2
 
@@ -35,6 +38,18 @@ class Match(val player1: Player,
 
     fun updateGame(gameNumber: Int, pointsOfSomePlayer: Pair<Player, Int>, pointsOfOtherPlayer: Pair<Player, Int>) {
         TODO()
+    }
+
+    private fun validatePlayers(somePlayer: Player, otherPlayer: Player) {
+        if (setOf(player1, player2) != setOf(somePlayer, otherPlayer)) {
+            throw IllegalArgumentException("Some or all of player keys are not involved in this match")
+        }
+    }
+
+    private fun validateMaxNumberOfGames() {
+        if (games.size == numberOfGames) {
+            throw IllegalStateException("Maximum number of games reached")
+        }
     }
 
 }
