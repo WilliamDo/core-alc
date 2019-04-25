@@ -1,11 +1,8 @@
 package com.ultimaspin.ply
 
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalStateException
-import kotlin.test.assertEquals
-import kotlin.test.assertSame
 
 class GameTest {
 
@@ -76,7 +73,7 @@ class GameTest {
         val player1 = Player("Joe")
         val player2 = Player("Fred")
 
-        val thrown = assertThrows<IllegalStateException> {
+        val thrown = assertThrows(IllegalStateException::class.java) {
             Game(
                 player1 = player1,
                 player2 = player2,

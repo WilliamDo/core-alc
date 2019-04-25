@@ -4,6 +4,7 @@ class Match(val player1: Player,
             val player2: Player,
             numberOfGames: Int) {
 
+    private val games = mutableListOf<Game>()
 
     fun getWinner(): Player {
         TODO()
@@ -13,11 +14,24 @@ class Match(val player1: Player,
         TODO()
     }
 
-    fun countGamesForPlayer1(): Int {
-        TODO()
+    fun countOfGamesFor(player: Player): Int {
+        return games.filter { it.getWinner() == player }.size
     }
 
-    fun countGamesForPlayer2(): Int {
+    fun addGame(pointsOfSomePlayer: Pair<Player, Int>, pointsOfOtherPlayer: Pair<Player, Int>) {
+
+        // todo assert that both players are for this match
+        // todo check maximum number of games are not exceeded
+
+        games.add(Game(
+            player1 = pointsOfSomePlayer.first,
+            pointsForPlayer1 = pointsOfSomePlayer.second,
+            player2 = pointsOfOtherPlayer.first,
+            pointsForPlayer2 = pointsOfOtherPlayer.second
+        ))
+    }
+
+    fun updateGame(gameNumber: Int, pointsOfSomePlayer: Pair<Player, Int>, pointsOfOtherPlayer: Pair<Player, Int>) {
         TODO()
     }
 
