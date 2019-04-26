@@ -5,7 +5,7 @@ import java.lang.IllegalStateException
 
 class Match(val player1: Player,
             val player2: Player,
-            private val numberOfGames: Int) {
+            numberOfGames: Int) {
 
     private val games = mutableListOf<Game>()
     private val gamesToWin = numberOfGames / 2 + 1
@@ -23,7 +23,15 @@ class Match(val player1: Player,
     }
 
     fun getLoser(): Player {
-        TODO()
+        val (gamesForPlayer1, gamesForPlayer2) = games.partition { it.getWinner() == player1 }
+
+        if (gamesForPlayer1.size == gamesToWin) {
+            return player2
+        } else if (gamesForPlayer2.size == gamesToWin) {
+            return player1
+        }
+
+        throw IllegalStateException("Unable to determine game loser")
     }
 
     fun countOfGamesFor(player: Player): Int {

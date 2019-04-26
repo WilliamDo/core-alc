@@ -88,6 +88,7 @@ class MatchTest {
         }
 
         assertSame(player1, match.getWinner())
+        assertSame(player2, match.getLoser())
 
     }
 
@@ -102,7 +103,7 @@ class MatchTest {
         }
 
         assertSame(player2, match.getWinner())
-
+        assertSame(player1, match.getLoser())
     }
 
     @Test
