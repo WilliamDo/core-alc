@@ -1,6 +1,7 @@
 package com.ultimaspin.ply
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
@@ -69,11 +70,40 @@ class MatchTest {
         val match = Match(player1, player2, 5)
 
         val thrown = assertThrows<IllegalStateException> {
-            for (i in 0..5)
-            match.addGame(player1 to 11, player2 to 5)
+            for (i in 0..5) {
+                match.addGame(player1 to 11, player2 to 5)
+            }
         }
 
         assertEquals("Maximum number of games reached", thrown.message)
+    }
+
+    @Test
+    fun `player 1 wins the match in straight games`() {
+        val player1 = Player("Joe")
+        val player2 = Player("Fred")
+        val match = Match(player1, player2, 5)
+
+        for (i in 0..2) {
+            match.addGame(player1 to 11, player2 to 5)
+        }
+
+        assertSame(player1, match.getWinner())
+
+    }
+
+    @Test
+    fun `player 2 wins the match in straight games`() {
+        val player1 = Player("Joe")
+        val player2 = Player("Fred")
+        val match = Match(player1, player2, 5)
+
+        for (i in 0..2) {
+            match.addGame(player2 to 11, player1 to 5)
+        }
+
+        assertSame(player2, match.getWinner())
+
     }
 
 }
