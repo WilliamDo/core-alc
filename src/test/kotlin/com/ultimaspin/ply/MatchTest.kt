@@ -64,6 +64,19 @@ class MatchTest {
     }
 
     @Test
+    fun `conflicting player when adding game details`() {
+        val player1 = Player("Joe")
+        val player2 = Player("Fred")
+        val match = Match(player1, player2, 5)
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            match.addGame(player1 to 11, player1 to 5)
+        }
+
+        assertEquals("Some or all of player keys are not involved in this match", thrown.message)
+    }
+
+    @Test
     fun `max number of games reached`() {
         val player1 = Player("Joe")
         val player2 = Player("Fred")
