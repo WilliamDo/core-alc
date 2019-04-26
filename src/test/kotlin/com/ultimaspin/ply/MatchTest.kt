@@ -76,20 +76,6 @@ class MatchTest {
         assertEquals("Some or all of player keys are not involved in this match", thrown.message)
     }
 
-    @Test
-    fun `max number of games reached`() {
-        val player1 = Player("Joe")
-        val player2 = Player("Fred")
-        val match = Match(player1, player2, 5)
-
-        val thrown = assertThrows<IllegalStateException> {
-            for (i in 0..5) {
-                match.addGame(player1 to 11, player2 to 5)
-            }
-        }
-
-        assertEquals("Maximum number of games reached", thrown.message)
-    }
 
     @Test
     fun `player 1 wins the match in straight games`() {
@@ -119,4 +105,18 @@ class MatchTest {
 
     }
 
+    @Test
+    fun `player wins too many games should throw exception`() {
+        val player1 = Player("Joe")
+        val player2 = Player("Fred")
+        val match = Match(player1, player2, 5)
+
+        val thrown = assertThrows<IllegalStateException> {
+            for (i in 0..4) {
+                match.addGame(player1 to 11, player2 to 5)
+            }
+        }
+
+        assertEquals("Match has completed so cannot add another game", thrown.message)
+    }
 }

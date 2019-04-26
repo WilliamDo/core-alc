@@ -8,10 +8,10 @@ class Match(val player1: Player,
             private val numberOfGames: Int) {
 
     private val games = mutableListOf<Game>()
+    private val gamesToWin = numberOfGames / 2 + 1
 
     fun getWinner(): Player {
         val (gamesForPlayer1, gamesForPlayer2) = games.partition { it.getWinner() == player1 }
-        val gamesToWin = numberOfGames / 2 + 1
 
         if (gamesForPlayer1.size == gamesToWin) {
             return player1
@@ -33,7 +33,7 @@ class Match(val player1: Player,
     fun addGame(pointsOfSomePlayer: Pair<Player, Int>, pointsOfOtherPlayer: Pair<Player, Int>) {
 
         validatePlayers(pointsOfSomePlayer.first, pointsOfOtherPlayer.first)
-        validateMaxNumberOfGames()
+        validateMatchIsInProgress()
 
         // interesting side effect of using player as keys means that it doesn't matter who is player 1 or 2
 
@@ -45,6 +45,13 @@ class Match(val player1: Player,
         ))
     }
 
+    private fun validateMatchIsInProgress() {
+        val (gamesForPlayer1, gamesForPlayer2) = games.partition { it.getWinner() == player1 }
+        if (gamesForPlayer1.size == gamesToWin || gamesForPlayer2.size == gamesToWin) {
+            throw IllegalStateException("Match has completed so cannot add another game")
+        }
+    }
+
     fun updateGame(gameNumber: Int, pointsOfSomePlayer: Pair<Player, Int>, pointsOfOtherPlayer: Pair<Player, Int>) {
         TODO()
     }
@@ -52,12 +59,6 @@ class Match(val player1: Player,
     private fun validatePlayers(somePlayer: Player, otherPlayer: Player) {
         if (setOf(player1, player2) != setOf(somePlayer, otherPlayer)) {
             throw IllegalArgumentException("Some or all of player keys are not involved in this match")
-        }
-    }
-
-    private fun validateMaxNumberOfGames() {
-        if (games.size == numberOfGames) {
-            throw IllegalStateException("Maximum number of games reached")
         }
     }
 
