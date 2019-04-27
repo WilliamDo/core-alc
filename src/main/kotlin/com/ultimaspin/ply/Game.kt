@@ -58,7 +58,7 @@ class Game(private val player1: Player,
             return player1
         }
 
-        throw IllegalStateException("Cannot determine lost of this game")
+        throw IllegalStateException("Cannot determine loser of this game")
     }
 
     companion object {
