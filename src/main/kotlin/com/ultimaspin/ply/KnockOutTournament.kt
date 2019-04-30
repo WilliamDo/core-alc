@@ -9,16 +9,27 @@ sealed class KnockOutTournamentNode {
 
     abstract fun getWinner(): Player?
 
+    abstract fun subscribe(node: KnockOutTournamentNode)
+
+    abstract fun onUpdate()
+
     class KnockOutMatchNode(
-        tournamentNode1: KnockOutTournamentNode,
-        tournamentNode2: KnockOutTournamentNode
+        private val tournamentNode1: KnockOutTournamentNode,
+        private val tournamentNode2: KnockOutTournamentNode
     ) : KnockOutTournamentNode() {
 
-        lateinit var match: Match
+
+        private val subscribers = mutableListOf<KnockOutTournamentNode>()
+
+        var match: Match? = null
 
         init {
-            if (tournamentNode1.getWinner() != null && tournamentNode2.getWinner() != null) {
-                match = Match(tournamentNode1.getWinner()!!, tournamentNode2.getWinner()!!, 5)
+
+            tournamentNode1.subscribe(this)
+            tournamentNode2.subscribe(this)
+
+            if (getPlayer1() != null && getPlayer2() != null) {
+                match = Match(getPlayer1()!!, getPlayer2()!!, 5)
             }
         }
 
@@ -26,11 +37,40 @@ sealed class KnockOutTournamentNode {
             return match?.getWinner()
         }
 
+        fun getPlayer1(): Player? = tournamentNode1.getWinner()
+
+        fun getPlayer2(): Player? = tournamentNode2.getWinner()
+
+        fun addGame(pointsOfSomePlayer: Pair<Player, Int>, pointsOfOtherPlayer: Pair<Player, Int>) {
+            match!!.addGame(pointsOfSomePlayer, pointsOfOtherPlayer)
+            subscribers.forEach { it.onUpdate() }
+        }
+
+        override fun subscribe(node: KnockOutTournamentNode) {
+            subscribers.add(node)
+        }
+
+        override fun onUpdate() {
+            if (match == null && getPlayer1() != null && getPlayer2() != null) {
+                match = Match(getPlayer1()!!, getPlayer2()!!, 5)
+            }
+        }
     }
+
+
 
     class KnockOutPlayerNode(private val player: Player) : KnockOutTournamentNode() {
         override fun getWinner(): Player? = player
+
+        override fun subscribe(node: KnockOutTournamentNode) {
+            // Do nothing, no need to notify since this class should be immutable
+        }
+
+        override fun onUpdate() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
     }
 
 }
+
 

@@ -10,7 +10,7 @@ class Match(val player1: Player,
     private val games = mutableListOf<Game>()
     private val gamesToWin = numberOfGames / 2 + 1
 
-    fun getWinner(): Player {
+    fun getWinner(): Player? {
         val (gamesForPlayer1, gamesForPlayer2) = games.partition { it.getWinner() == player1 }
 
         if (gamesForPlayer1.size == gamesToWin) {
@@ -19,7 +19,7 @@ class Match(val player1: Player,
             return player2
         }
 
-        throw IllegalStateException("Unable to determine game winner")
+        return null
     }
 
     fun getLoser(): Player {
