@@ -1,6 +1,7 @@
 package com.ultimaspin.ply
 
 import com.ultimaspin.ply.KnockOutTournamentNode.KnockOutPlayerNode
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -75,6 +76,48 @@ class KnockOutTournamentTest {
         matchNodeFinal.addGame(player1 to 11, player3 to 7)
         matchNodeFinal.addGame(player1 to 11, player3 to 7)
         assertSame(player1, matchNodeFinal.getWinner())
+
+    }
+
+    @Test
+    fun `traverse knock-out tournament for all players`() {
+        val player1 = Player("Bob")
+        val playerNode1 = KnockOutPlayerNode(player1)
+
+        val player2 = Player("Fred")
+        val playerNode2 = KnockOutPlayerNode(player2)
+
+        val player3 = Player("Joe")
+        val playerNode3 = KnockOutPlayerNode(player3)
+
+        val player4 = Player("Albert")
+        val playerNode4 = KnockOutPlayerNode(player4)
+
+        val matchNode1 = KnockOutTournamentNode.KnockOutMatchNode(playerNode1, playerNode2)
+        val matchNode2 = KnockOutTournamentNode.KnockOutMatchNode(playerNode3, playerNode4)
+
+        val matchNodeFinal = KnockOutTournamentNode.KnockOutMatchNode(matchNode1, matchNode2)
+
+        val tournament = KnockOutTournament(matchNodeFinal)
+
+        val players = tournament.getPlayers()
+
+        assertThat(players).containsExactlyInAnyOrder(player1, player2, player3, player4)
+    }
+
+    @Test
+    fun `builds knock-out tournament`() {
+
+        val players = listOf(
+            Player("Joe"),
+            Player("Fred"),
+            Player("Albert"),
+            Player("Bob")
+        )
+
+        val tournament = KnockOutTournamentBuilder.toKnockOutTournament(players)
+
+        assertThat(tournament.getPlayers()).containsAll(players)
 
     }
 

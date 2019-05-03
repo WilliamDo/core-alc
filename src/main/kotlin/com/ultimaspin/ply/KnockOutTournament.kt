@@ -1,6 +1,23 @@
 package com.ultimaspin.ply
 
-class KnockOutTournament {
+class KnockOutTournament(val finalMatchNode: KnockOutTournamentNode) {
+
+    fun getPlayers(): List<Player> {
+        return getPlayers(finalMatchNode)
+    }
+
+    private fun getPlayers(tournamentNode: KnockOutTournamentNode): List<Player> {
+
+        return when (tournamentNode) {
+            is KnockOutTournamentNode.KnockOutMatchNode -> {
+                getPlayers(tournamentNode.tournamentNode1) + getPlayers(tournamentNode.tournamentNode2)
+            }
+            is KnockOutTournamentNode.KnockOutPlayerNode -> {
+                listOf(tournamentNode.getWinner()!!)
+            }
+        }
+
+    }
 
 }
 
@@ -14,8 +31,8 @@ sealed class KnockOutTournamentNode {
     abstract fun onUpdate()
 
     class KnockOutMatchNode(
-        private val tournamentNode1: KnockOutTournamentNode,
-        private val tournamentNode2: KnockOutTournamentNode
+        val tournamentNode1: KnockOutTournamentNode,
+        val tournamentNode2: KnockOutTournamentNode
     ) : KnockOutTournamentNode() {
 
 
@@ -68,6 +85,40 @@ sealed class KnockOutTournamentNode {
 
         override fun onUpdate() {
             // Do nothing, no state to update
+        }
+    }
+
+}
+
+class KnockOutTournamentBuilder {
+
+    companion object {
+        // todo this can only handle list sizes that are powers of 2
+        fun toKnockOutTournament(players: List<Player>): KnockOutTournament {
+            val playerNodes = players.map { KnockOutTournamentNode.KnockOutPlayerNode(it) }.toList()
+
+            var tournamentNodes: List<KnockOutTournamentNode> = playerNodes.toList()
+
+            while (tournamentNodes.size > 1) {
+
+                val iterator = tournamentNodes.iterator()
+
+                val nextLevelNodes = mutableListOf<KnockOutTournamentNode>()
+
+                while (iterator.hasNext()) {
+                    // todo this smells so bad
+                    val tournamentNode1 = iterator.next()
+                    val tournamentNode2 = iterator.next()
+                    nextLevelNodes.add(KnockOutTournamentNode.KnockOutMatchNode(tournamentNode1, tournamentNode2))
+                }
+
+                tournamentNodes = nextLevelNodes.toList()
+
+
+            }
+
+            return KnockOutTournament(tournamentNodes[0])
+
         }
     }
 
