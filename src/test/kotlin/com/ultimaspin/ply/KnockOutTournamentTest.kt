@@ -121,5 +121,23 @@ class KnockOutTournamentTest {
 
     }
 
+    @Test
+    fun `builds knock-out tournament with non-binary base number of players`() {
+
+        val players = listOf(
+            Player("Joe"),
+            Player("Fred"),
+            Player("Albert"),
+            Player("Bob"),
+            Player("Alice"),
+            Player("Lucy")
+        )
+
+        val tournament = KnockOutTournamentBuilder.toKnockOutTournament(players)
+
+        assertThat(tournament.getPlayers()).containsAll(players)
+
+    }
+
 
 }

@@ -93,33 +93,46 @@ sealed class KnockOutTournamentNode {
 class KnockOutTournamentBuilder {
 
     companion object {
-        // todo this can only handle list sizes that are powers of 2
         fun toKnockOutTournament(players: List<Player>): KnockOutTournament {
-            val playerNodes = players.map { KnockOutTournamentNode.KnockOutPlayerNode(it) }.toList()
+            return KnockOutTournament(toTournamentTree(players))
+        }
 
-            var tournamentNodes: List<KnockOutTournamentNode> = playerNodes.toList()
+        private fun toTournamentTree(players: List<Player>): KnockOutTournamentNode {
 
-            while (tournamentNodes.size > 1) {
-
-                val iterator = tournamentNodes.iterator()
-
-                val nextLevelNodes = mutableListOf<KnockOutTournamentNode>()
-
-                while (iterator.hasNext()) {
-                    // todo this smells so bad
-                    val tournamentNode1 = iterator.next()
-                    val tournamentNode2 = iterator.next()
-                    nextLevelNodes.add(KnockOutTournamentNode.KnockOutMatchNode(tournamentNode1, tournamentNode2))
-                }
-
-                tournamentNodes = nextLevelNodes.toList()
-
-
+            if (players.isEmpty()) {
+                throw IllegalArgumentException("Cannot create tournament for no players")
             }
 
-            return KnockOutTournament(tournamentNodes[0])
+            if (players.size == 1) {
+                return KnockOutTournamentNode.KnockOutPlayerNode(player = players[0])
+            }
+
+            val (first, second) = partition(players)
+
+            return KnockOutTournamentNode.KnockOutMatchNode(
+                toTournamentTree(first),
+                toTournamentTree(second)
+            )
 
         }
+
+        private fun partition(players: List<Player>): Pair<List<Player>, List<Player>> {
+            val first = mutableListOf<Player>()
+            val second = mutableListOf<Player>()
+
+
+            players.forEachIndexed { index, player ->
+                if (index % 2 == 0) {
+                    first.add(player)
+                } else {
+                    second.add(player)
+                }
+            }
+
+            return first to second
+        }
+
+
     }
 
 }
