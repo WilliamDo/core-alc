@@ -55,14 +55,14 @@ class KnockOutTournamentTest {
 
         val matchNodeFinal = KnockOutTournamentNode.KnockOutMatchNode(matchNode1, matchNode2)
 
-        matchNode1.addGame(player1 to 11, player2 to 5)
-        matchNode1.addGame(player1 to 11, player2 to 5)
-        matchNode1.addGame(player1 to 11, player2 to 5)
+        matchNode1.match!!.addGame(player1 to 11, player2 to 5)
+        matchNode1.match!!.addGame(player1 to 11, player2 to 5)
+        matchNode1.match!!.addGame(player1 to 11, player2 to 5)
         assertSame(player1, matchNode1.getWinner())
 
-        matchNode2.addGame(player3 to 11, player4 to 5)
-        matchNode2.addGame(player3 to 11, player4 to 5)
-        matchNode2.addGame(player3 to 11, player4 to 5)
+        matchNode2.match!!.addGame(player3 to 11, player4 to 5)
+        matchNode2.match!!.addGame(player3 to 11, player4 to 5)
+        matchNode2.match!!.addGame(player3 to 11, player4 to 5)
         assertSame(player3, matchNode2.getWinner())
 
         assertSame(player1, matchNodeFinal.getPlayer1())
@@ -72,9 +72,9 @@ class KnockOutTournamentTest {
         assertSame(player1, matchNodeFinal.match!!.player1)
         assertSame(player3, matchNodeFinal.match!!.player2)
 
-        matchNodeFinal.addGame(player1 to 11, player3 to 7)
-        matchNodeFinal.addGame(player1 to 11, player3 to 7)
-        matchNodeFinal.addGame(player1 to 11, player3 to 7)
+        matchNodeFinal.match!!.addGame(player1 to 11, player3 to 7)
+        matchNodeFinal.match!!.addGame(player1 to 11, player3 to 7)
+        matchNodeFinal.match!!.addGame(player1 to 11, player3 to 7)
         assertSame(player1, matchNodeFinal.getWinner())
 
     }

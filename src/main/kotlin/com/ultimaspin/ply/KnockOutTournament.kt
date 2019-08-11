@@ -25,7 +25,7 @@ class KnockOutTournament(val finalMatchNode: KnockOutTournamentNode) {
         return getMatch(finalMatchNode, id)
     }
 
-    fun updateMatch(id: UUID) {
+    fun updateMatch(id: UUID, match: Match) {
         TODO("What additional parameters should be used to store match details?")
     }
 
@@ -56,11 +56,6 @@ class KnockOutTournament(val finalMatchNode: KnockOutTournamentNode) {
 sealed class KnockOutTournamentNode {
 
     abstract fun getWinner(): Player?
-
-    abstract fun subscribe(node: KnockOutTournamentNode)
-
-    abstract fun onUpdate()
-
     // todo probably want a more testable way to assign IDs
     val id: UUID = UUID.randomUUID()
 
@@ -69,57 +64,44 @@ sealed class KnockOutTournamentNode {
         val tournamentNode2: KnockOutTournamentNode
     ) : KnockOutTournamentNode() {
 
+        private var _match: Match? = null
 
-        private val subscribers = mutableListOf<KnockOutTournamentNode>()
-
-        var match: Match? = null
+        var match: Match?
+            get() {
+                return if (this._match != null) {
+                    _match
+                } else if (getPlayer1() != null && getPlayer2() != null) {
+                    _match = Match(getPlayer1()!!, getPlayer2()!!, 5)
+                    _match
+                } else {
+                    null
+                }
+            }
+            set(value) {
+                // todo validate the players
+                _match = value
+            }
 
         init {
-
-            tournamentNode1.subscribe(this)
-            tournamentNode2.subscribe(this)
-
             if (getPlayer1() != null && getPlayer2() != null) {
-                match = Match(getPlayer1()!!, getPlayer2()!!, 5)
+                _match = Match(getPlayer1()!!, getPlayer2()!!, 5)
             }
         }
 
         override fun getWinner(): Player? {
-            return match?.getWinner()
+            return _match?.getWinner()
         }
 
         fun getPlayer1(): Player? = tournamentNode1.getWinner()
 
         fun getPlayer2(): Player? = tournamentNode2.getWinner()
 
-        fun addGame(pointsOfSomePlayer: Pair<Player, Int>, pointsOfOtherPlayer: Pair<Player, Int>) {
-            match!!.addGame(pointsOfSomePlayer, pointsOfOtherPlayer)
-            subscribers.forEach { it.onUpdate() }
-        }
-
-        override fun subscribe(node: KnockOutTournamentNode) {
-            subscribers.add(node)
-        }
-
-        override fun onUpdate() {
-            if (match == null && getPlayer1() != null && getPlayer2() != null) {
-                match = Match(getPlayer1()!!, getPlayer2()!!, 5)
-            }
-        }
     }
 
 
 
     class KnockOutPlayerNode(private val player: Player) : KnockOutTournamentNode() {
         override fun getWinner(): Player? = player
-
-        override fun subscribe(node: KnockOutTournamentNode) {
-            // Do nothing, no need to notify since this class should be immutable
-        }
-
-        override fun onUpdate() {
-            // Do nothing, no state to update
-        }
     }
 
 }
