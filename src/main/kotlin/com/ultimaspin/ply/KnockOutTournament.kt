@@ -1,5 +1,7 @@
 package com.ultimaspin.ply
 
+import java.util.*
+
 class KnockOutTournament(val finalMatchNode: KnockOutTournamentNode) {
 
     fun getPlayers(): List<Player> {
@@ -19,6 +21,35 @@ class KnockOutTournament(val finalMatchNode: KnockOutTournamentNode) {
 
     }
 
+    fun getMatch(id: UUID): Match? {
+        return getMatch(finalMatchNode, id)
+    }
+
+    fun updateMatch(id: UUID) {
+        TODO("What additional parameters should be used to store match details?")
+    }
+
+    // todo why does this smell so much?
+    private fun getMatch(tournamentNode: KnockOutTournamentNode, id: UUID): Match? {
+        if (tournamentNode is KnockOutTournamentNode.KnockOutMatchNode) {
+            if (id == tournamentNode.id) {
+                return tournamentNode.match
+            } else {
+                var match = getMatch(tournamentNode.tournamentNode1, id)
+                if (match != null) {
+                    return match
+                }
+
+                match = getMatch(tournamentNode.tournamentNode2, id)
+                if (match != null) {
+                    return match
+                }
+            }
+        }
+
+        return null
+    }
+
 }
 
 
@@ -29,6 +60,9 @@ sealed class KnockOutTournamentNode {
     abstract fun subscribe(node: KnockOutTournamentNode)
 
     abstract fun onUpdate()
+
+    // todo probably want a more testable way to assign IDs
+    val id: UUID = UUID.randomUUID()
 
     class KnockOutMatchNode(
         val tournamentNode1: KnockOutTournamentNode,

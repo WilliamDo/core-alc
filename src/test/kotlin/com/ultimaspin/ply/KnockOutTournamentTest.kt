@@ -139,5 +139,30 @@ class KnockOutTournamentTest {
 
     }
 
+    @Test
+    fun `get match identifiers`() {
+        val players = listOf(
+            Player("Joe"),
+            Player("Fred"),
+            Player("Albert"),
+            Player("Bob")
+        )
+
+        val tournament = KnockOutTournamentBuilder.toKnockOutTournament(players)
+        println(tournament.finalMatchNode.id)
+
+        val finalMatchNode = tournament.finalMatchNode as KnockOutTournamentNode.KnockOutMatchNode
+        println(finalMatchNode.tournamentNode1.id)
+        println(finalMatchNode.tournamentNode2.id)
+
+        val fooMatch = tournament.getMatch(finalMatchNode.tournamentNode1.id)
+        val barMatch = tournament.getMatch(finalMatchNode.tournamentNode2.id)
+
+
+        assertEquals(Player("Joe"), fooMatch!!.player1)
+        assertEquals(Player("Albert"), fooMatch!!.player2)
+
+    }
+
 
 }
