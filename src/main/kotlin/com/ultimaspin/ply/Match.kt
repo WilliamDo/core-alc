@@ -22,7 +22,7 @@ class Match(val player1: Player,
         return null
     }
 
-    fun getLoser(): Player {
+    fun getLoser(): Player? {
         val (gamesForPlayer1, gamesForPlayer2) = games.partition { it.getWinner() == player1 }
 
         if (gamesForPlayer1.size == gamesToWin) {
@@ -31,7 +31,7 @@ class Match(val player1: Player,
             return player1
         }
 
-        throw IllegalStateException("Unable to determine game loser")
+        return null
     }
 
     fun countOfGamesFor(player: Player): Int {
